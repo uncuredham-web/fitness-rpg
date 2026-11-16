@@ -1,12 +1,26 @@
-// ui.js
+// ui.js（図鑑・累計記録・URL同期対応版）
 
-// ui.js の冒頭部分を変更
 window.onload = async () => {
+  // 1. URLに引き継ぎデータ(?save=...)が含まれていたら自動復元
+  const params = new URLSearchParams(window.location.search);
+  const saveParam = params.get('save');
+  if (saveParam) {
+    try {
+      const json = decodeURIComponent(escape(atob(saveParam)));
+      playerState = JSON.parse(json);
+      saveGame();
+      // URLからパラメータを消してスッキリさせる
+      window.history.replaceState({}, document.title, window.location.pathname);
+      addLog('📲 引き継ぎURLからセーブデータを自動復元しました！');
+    } catch (e) {
+      addLog('❌ 引き継ぎURLの読み込みに失敗しました。');
+    }
+  }
+
   const isUnlocked = localStorage.getItem('batting_unlocked') === 'true';
   document.getElementById('batting-unlock-check').checked = isUnlocked;
   toggleBattingLock(false);
 
-  // スプレッドシートから最新データを読み込み
   const loaded = await loadMasterDataFromSheet();
   if (loaded) {
     addLog('☁️ スプレッドシートから最新の装備データを読み込みました！');
@@ -14,6 +28,43 @@ window.onload = async () => {
 
   updateUI();
 };
+
+// 画面タブの切り替え（冒険画面 / 図鑑・記録画面）
+function switchScreen(screenName) {
+  document.getElementById('screen-adventure').style.display = (screenName === 'adventure') ? 'block' : 'none';
+  document.getElementById('screen-record').style.display = (screenName === 'record') ? 'block' : 'none';
+  
+  document.getElementById('nav-adventure').classList.toggle('active', screenName === 'adventure');
+  document.getElementById('nav-record').classList.toggle('active', screenName === 'record');
+
+  if (screenName === 'record') renderRecordScreen();
+}
+
+function renderRecordScreen() {
+  const s = playerState.stats;
+  document.getElementById('stat-days').textContent = `${s.adventureCount} 回`;
+  document.getElementById('stat-distance').textContent = `${(s.totalDistance / 1000).toFixed(2)} km (${s.walkingMin}分)`;
+  document.getElementById('stat-stretch').textContent = `${s.stretchMin} 分`;
+  document.getElementById('stat-batting').textContent = `${s.battingBalls} 球`;
+
+  // 図鑑リストの描画
+  const listEl = document.getElementById('catalog-list');
+  document.getElementById('catalog-count').textContent = `${playerState.catalog.length} 種類発見`;
+  listEl.innerHTML = '';
+
+  if (playerState.catalog.length === 0) {
+    listEl.innerHTML = '<p class="empty-msg">まだ装備を発見していません。冒険に出発しよう！</p>';
+    return;
+  }
+
+  // 新しく手に入れた順に表示
+  [...playerState.catalog].reverse().forEach(itemName => {
+    const div = document.createElement('div');
+    div.className = 'catalog-item';
+    div.textContent = `🗡️ ${itemName}`;
+    listEl.appendChild(div);
+  });
+}
 
 function toggleBattingLock(save = true) {
   const isUnlocked = document.getElementById('batting-unlock-check').checked;
@@ -58,28 +109,18 @@ function handleDailyAdventure() {
     stretch: parseInt(document.getElementById('input-stretch').value) || 0,
     batting: parseInt(document.getElementById('input-batting').value) || 0
   };
-
   const res = executeDailyAdventure(inputs);
-  if (res.error) {
-    addLog('❌ ' + res.error);
-    return;
-  }
+  if (res.error) { addLog('❌ ' + res.error); return; }
 
   addLog('=== 本日の冒険結果 ===');
   [...res.logs].reverse().forEach(addLog);
-
-  setVal('walking', 0);
-  setVal('stretch', 0);
-  setVal('batting', 0);
+  setVal('walking', 0); setVal('stretch', 0); setVal('batting', 0);
   updateUI();
 }
 
 function handleUpgrade(slot) {
   const res = upgradeEquipment(slot);
-  if (res.error) {
-    addLog('❌ ' + res.error);
-    return;
-  }
+  if (res.error) { addLog('❌ ' + res.error); return; }
   res.logs.forEach(addLog);
   updateUI();
 }
@@ -111,20 +152,12 @@ function updateUI() {
   });
 }
 
-function exportSave() {
+// 引き継ぎ用URLを生成してコピー
+function copySyncUrl() {
   const json = JSON.stringify(playerState);
-  navigator.clipboard.writeText(json).then(() => alert('セーブデータをコピーしました！'));
-}
-
-function importSave() {
-  const json = prompt('バックアップしたJSONを貼り付けてください:');
-  if (!json) return;
-  try {
-    playerState = JSON.parse(json);
-    saveGame();
-    updateUI();
-    addLog('✅ セーブデータを復元しました！');
-  } catch (e) {
-    alert('読み込みに失敗しました。');
-  }
+  const encoded = btoa(unescape(encodeURIComponent(json)));
+  const syncUrl = `${window.location.origin}${window.location.pathname}?save=${encoded}`;
+  navigator.clipboard.writeText(syncUrl).then(() => {
+    alert('引き継ぎ用URLをコピーしました！\nLINEやメモ帳に貼り付けて、別の端末でそのURLを開くとデータが同期されます。');
+  });
 }

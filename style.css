@@ -391,3 +391,70 @@ body {
   grid-template-columns: repeat(4, 1fr);
   gap: 6px;
 }
+/* ナビゲーション・図鑑・実績用の追加スタイル */
+.main-nav {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.nav-btn {
+  padding: 10px;
+  background: white;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  color: var(--text-sub);
+  cursor: pointer;
+}
+
+.nav-btn.active {
+  border-color: var(--primary);
+  background: #e0f2fe;
+  color: var(--primary-dark);
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.stat-box {
+  background: #f8fafc;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-box small {
+  font-size: 0.75rem;
+  color: var(--text-sub);
+}
+
+.stat-box strong {
+  font-size: 1.05rem;
+  color: var(--primary-dark);
+  margin-top: 2px;
+}
+
+.catalog-box {
+  max-height: 300px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.catalog-item {
+  background: #f8fafc;
+  border: 1px solid var(--border);
+  padding: 8px 10px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: bold;
+}
