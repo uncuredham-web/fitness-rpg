@@ -161,3 +161,11 @@ function copySyncUrl() {
     alert('引き継ぎ用URLをコピーしました！\nLINEやメモ帳に貼り付けて、別の端末でそのURLを開くとデータが同期されます。');
   });
 }
+function resetSaveData() {
+  if (!confirm('本当にすべてのセーブデータと記録を初期化しますか？\n（この操作は取り消せません）')) {
+    return;
+  }
+  localStorage.removeItem('hakusura_fitness_save_v2');
+  localStorage.removeItem('hakusura_fitness_save_v1');
+  location.reload();
+}
