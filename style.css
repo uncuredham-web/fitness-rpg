@@ -1,0 +1,393 @@
+/* style.css */
+:root {
+  --bg-color: #f0f4f8;
+  --card-bg: #ffffff;
+  --primary: #0ea5e9;      /* 爽やかなスカイブルー */
+  --primary-dark: #0284c7;
+  --accent: #f97316;       /* 元気が出るスポーツオレンジ */
+  --accent-dark: #ea580c;
+  --success: #10b981;      /* 回復・バフのグリーン */
+  --text-main: #1e293b;
+  --text-sub: #64748b;
+  --border: #e2e8f0;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  line-height: 1.5;
+  padding-bottom: 40px;
+}
+
+.app-container {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 12px;
+}
+
+/* ヘッダー */
+.status-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(135deg, var(--primary), #38bdf8);
+  color: white;
+  padding: 14px 16px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  box-shadow: 0 4px 6px -1px rgba(14, 165, 233, 0.2);
+}
+
+.badge {
+  background: rgba(255, 255, 255, 0.25);
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-right: 8px;
+}
+
+.exp-text {
+  font-size: 0.85rem;
+}
+
+.stone-box {
+  background: white;
+  color: var(--text-main);
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+}
+
+/* カード共通 */
+.card {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+  border: 1px solid var(--border);
+}
+
+.card-title {
+  font-weight: bold;
+  font-size: 0.95rem;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--text-main);
+}
+
+/* 睡眠バフ */
+.buff-badge {
+  font-size: 0.8rem;
+  padding: 2px 8px;
+  border-radius: 12px;
+  background: #e2e8f0;
+  color: var(--text-sub);
+}
+
+.buff-badge.active {
+  background: #d1fae5;
+  color: #065f46;
+  font-weight: bold;
+}
+
+.sleep-buttons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.btn-sleep {
+  background: #f8fafc;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 4px;
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: var(--text-main);
+  cursor: pointer;
+}
+
+.btn-sleep:active {
+  background: #e0f2fe;
+  border-color: var(--primary);
+}
+
+.btn-sleep small {
+  color: var(--success);
+  font-weight: normal;
+}
+
+/* 装備リスト */
+.equip-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.equip-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f8fafc;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+.equip-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.slot-label {
+  font-size: 0.7rem;
+  color: var(--primary-dark);
+  font-weight: bold;
+}
+
+.equip-info strong {
+  font-size: 0.9rem;
+}
+
+.equip-info small {
+  font-size: 0.75rem;
+  color: var(--text-sub);
+}
+
+.btn-upgrade {
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-upgrade:active {
+  background: var(--primary-dark);
+}
+
+/* 運動入力 */
+.type-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.tab-btn {
+  padding: 10px 4px;
+  border: 2px solid var(--border);
+  background: white;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  cursor: pointer;
+  color: var(--text-main);
+}
+
+.tab-btn.active {
+  border-color: var(--primary);
+  background: #e0f2fe;
+  color: var(--primary-dark);
+}
+
+.tab-btn.locked {
+  background: #f1f5f9;
+  color: #94a3b8;
+  border-style: dashed;
+}
+
+.unlock-bar {
+  margin-bottom: 12px;
+  text-align: right;
+}
+
+.unlock-label {
+  font-size: 0.78rem;
+  color: var(--text-sub);
+  cursor: pointer;
+}
+
+.input-area {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.number-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.number-display input {
+  width: 110px;
+  font-size: 1.6rem;
+  font-weight: bold;
+  text-align: center;
+  padding: 6px;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+}
+
+.number-display span {
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+.quick-btns {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+
+.btn-quick {
+  padding: 8px;
+  background: #f1f5f9;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-quick:active {
+  background: #e2e8f0;
+}
+
+.btn-go {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, var(--accent), #fb923c);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(249, 115, 22, 0.25);
+}
+
+.btn-go:active {
+  background: var(--accent-dark);
+  transform: translateY(1px);
+}
+
+/* ログ */
+.log-box {
+  max-height: 180px;
+  overflow-y: auto;
+  background: #f8fafc;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  font-size: 0.85rem;
+}
+
+.log-entry {
+  padding: 4px 0;
+  border-bottom: 1px dashed #e2e8f0;
+}
+
+.log-entry:first-child {
+  font-weight: bold;
+  color: var(--primary-dark);
+}
+
+/* バックアップフッター */
+.backup-footer {
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--text-sub);
+  margin-top: 16px;
+}
+
+.backup-controls {
+  margin-top: 8px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.btn-sub {
+  padding: 6px 12px;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+/* 一括入力用の追加スタイル */
+.workout-row {
+  background: #f8fafc;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 8px;
+}
+
+.workout-row.locked-row {
+  background: #f1f5f9;
+  border-style: dashed;
+  opacity: 0.75;
+}
+
+.row-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.row-header strong {
+  font-size: 0.9rem;
+}
+
+.row-header small {
+  color: var(--text-sub);
+  font-weight: normal;
+  font-size: 0.75rem;
+}
+
+.mini-input {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.mini-input input {
+  width: 65px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  text-align: right;
+  padding: 4px 6px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: white;
+}
+
+.mini-input span {
+  font-size: 0.85rem;
+  font-weight: bold;
+}
+
+.row-btns {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
